@@ -794,4 +794,21 @@ PlayMusic.prototype.getFavorites = function(callback) {
 // So we don't break things using "getFavotites"
 PlayMusic.prototype.getFavotites = PlayMusic.prototype.getFavorites;
 
+PlayMusic.prototype.deletePlaylist = function (playlistId, callback) {
+    var that = this;
+    var mutations = [
+        {
+            "delete": playlistId
+        }
+    ];
+    this.request({
+        method: "POST",
+        contentType: "application/json",
+        url: this._baseURL + 'playlistbatch?' + querystring.stringify({ alt: "json" }),
+        data: JSON.stringify({ "mutations": mutations })
+    }, function (err, body) {
+        callback(err ? new Error("error deleting playlist " + err) : null, body);
+    });
+};
+
 module.exports = exports = PlayMusic;
